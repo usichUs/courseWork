@@ -1,32 +1,42 @@
-body {
-    background-color: #9bffc5;
-}
-
-ul {
+ /*Структура дерева */
+ #file-tree ul {
     list-style: none;
-    padding-left: 20px;
-}
-
-li {
+    margin: 0;
+    padding: 0;
+  }
+  
+  #file-tree .folder {
     cursor: pointer;
-}
-
-li.folder:before {
-    content: "+";
-    margin-right: 5px;
-}
-
-li.file:before {
-    content: "-";
-    margin-right: 5px;
-}
-
-li.folder {
-    font-weight: 700;
-    font-family: 'Roboto', sans-serif;
-}
-
-li.file {
+    font-family: 'Montserrat', sans-serif;
     font-weight: 300;
-    font-family: 'Roboto', sans-serif;
-}
+    font-size: 20px;
+  }
+  
+  #file-tree .file {
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    margin-left: 10px;
+  }
+  
+  #file-tree .folder:before {
+    content: "📁 ";
+  }
+  
+  #file-tree .folder.open {
+    font-weight: 700;
+  }
+  
+  #file-tree .file.hidden {
+    display: none;
+  }
+  #file-tree .file {
+    display: block;
+  }
+
+  #file-tree .file:before {
+    content: "🗒️ ";
+  }
+
+  /* Контекст меню */

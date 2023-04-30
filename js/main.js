@@ -1,20 +1,36 @@
-class File {
-    constructor(name, size, date) {
-      this.name = name;
-      this.size = size;
-      this.date = date;
-    }
-  }
-  
-  class Folder {
-    constructor(name, files, folders) {
-      this.name = name;
-      this.files = files;
-      this.folders = folders;
-    }
-  }
+// Папки
+const folders = document.querySelectorAll("#file-tree .folder");
+// Файлы
+const files = document.querySelectorAll("#file-tree .file");
+// Дерево
+const fileTree = document.querySelector("#file-tree");
 
-  const folder = new Folder("Каталог 1", [
-    new File("Файл 1.1", 1024, new Date()),
-    new File("Файл 1.2", 2048, new Date())
-  ], []);
+
+// Открыть/Закрыть папку
+folders.forEach((folder) => {
+  folder.addEventListener("click", () => {
+    const childFiles = folder.nextElementSibling.querySelectorAll(".file");
+    childFiles.forEach((file) => {
+      file.classList.toggle("hidden");
+    });
+    folder.classList.toggle("open");
+  });
+});
+
+// Контекстное меню 
+fileTree.addEventListener("contextmenu", (event)=> {
+  event.preventDefault();
+
+  const target = event.target;
+
+  if(target.classList.contains("folder")) {
+
+  };
+});
+
+// Обработчик клика на файл - показывает какой файл открыт
+files.forEach((file) => {
+  file.addEventListener("click", () => {
+    console.log(`Открыт файл: ${file.textContent}`);
+  });
+});
