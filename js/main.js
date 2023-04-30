@@ -1,3 +1,5 @@
+let 
+
 for (let li of tree.querySelectorAll('li')) {
     let span = document.createElement('span');
     span.classList.add('show');
