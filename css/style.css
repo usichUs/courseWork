@@ -1,15 +1,32 @@
-.hide::before {
-    content: '+';
+body {
+    background-color: #9bffc5;
 }
 
-.show::before {
-    content: '+';
+ul {
+    list-style: none;
+    padding-left: 20px;
 }
 
-.tree span:hover {
-    font-weight: bold;
-}
-
-.tree span {
+li {
     cursor: pointer;
+}
+
+li.folder:before {
+    content: "+";
+    margin-right: 5px;
+}
+
+li.file:before {
+    content: "-";
+    margin-right: 5px;
+}
+
+li.folder {
+    font-weight: 700;
+    font-family: 'Roboto', sans-serif;
+}
+
+li.file {
+    font-weight: 300;
+    font-family: 'Roboto', sans-serif;
 }

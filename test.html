@@ -1,14 +1,13 @@
+Nikita Usachev, [30.04.2023 21:17]
+html
 <!DOCTYPE html>
 <html>
 <head>
- <title>Tree View</title>
+ <title>Tree View Example</title>
  <style>
   ul {
    list-style: none;
    padding-left: 20px;
-  }
-  li {
-   margin-left: -20px;
   }
   li.folder:before {
    content: "📁";
@@ -18,90 +17,177 @@
    content: "📄";
    margin-right: 5px;
   }
+  li button {
+   margin-left: 10px;
+  }
  </style>
 </head>
 <body>
- <h1>Tree View</h1>
+ <h1>Tree View Example</h1>
  <div id="tree"></div>
- <button id="add-folder">Add Folder</button>
- <button id="add-file">Add File</button>
+ <br>
+ <label for="folderName">Folder Name:</label>
+ <input type="text" id="folderName">
+ <button id="addFolder">Add Folder</button>
+ <br>
+ <label for="fileName">File Name:</label>
+ <input type="text" id="fileName">
+ <button id="addFile">Add File</button>
+
  <script>
-  // Создаем корневую папку
-  var root = document.createElement("ul");
-  root.classList.add("folder");
-  root.innerHTML = "<li>Root</li>";
-  document.getElementById("tree").appendChild(root);
+  // Define the tree data
+  var treeData = [
+   {
+    name: "Folder 1",
+    type: "folder",
+    children: [
+     {
+      name: "File 1",
+      type: "file"
+     },
+     {
+      name: "File 2",
+      type: "file"
+     }
+    ]
+   },
+   {
+    name: "Folder 2",
+    type: "folder",
+    children: [
+     {
+      name: "File 3",
+      type: "file"
+     },
+     {
+      name: "File 4",
+      type: "file"
+     }
+    ]
+   }
+  ];
 
-  // Обработчик события для кнопки "Add Folder"
-  document.getElementById("add-folder").addEventListener("click", function() {
-   // Создаем новую папку
-   var folder = document.createElement("ul");
-   folder.classList.add("folder");
-   // Создаем текстовое поле для ввода имени папки
-   var input = document.createElement("input");
-   input.type = "text";
-   input.placeholder = "Folder name";
-   // Создаем кнопку "Add"
-   var addButton = document.createElement("button");
-   addButton.textContent = "Add";
-   // Обработчик события для кнопки "Add"
-   addButton.addEventListener("click", function() {
-    // Создаем новый элемент папки
-    var item = document.createElement("li");
-    item.textContent = input.value;
-    item.classList.add("folder");
-    // Добавляем новый элемент папки в папку-родитель
-    folder.appendChild(item);
-    // Удаляем текстовое поле и кнопку "Add"
-    folder.removeChild(input);
-    folder.removeChild(addButton);
-   });
-   // Добавляем текстовое поле и кнопку "Add" в новую папку
-   folder.appendChild(input);
-   folder.appendChild(addButton);
-   // Добавляем новую папку в папку-родитель
-   root.appendChild(folder);
-  });
+  // Create the tree view
+  var treeView = document.getElementById("tree");
+  var rootNode = document.createElement("ul");
+  rootNode.classList.add("folder");
+  treeView.appendChild(rootNode);
 
-  // Обработчик события для кнопки "Add File"
-  document.getElementById("add-file").addEventListener("click", function() {
-   // Создаем новый файл
-   var file = document.createElement("li");
-   file.classList.add("file");
-   // Создаем текстовое поле для ввода имени файла
-   var input = document.createElement("input");
-   input.type = "text";
-   input.placeholder = "File name";
-   // Создаем кнопку "Add"
-   var addButton = document.createElement("button");
-   addButton.textContent = "Add";
-   // Добавляем текстовое поле и кнопку "Add" в новый файл
-   file.appendChild(input);
-   file.appendChild(addButton);
-   // Добавляем новый файл в папку-родитель
-   root.appendChild(file);
+  function createTree(data, parentNode) {
+   for (var i = 0; i < data.length; i++) {
+    var node = document.createElement("li");
+    node.textContent = data[i].name;
+    node.classList.add(data[i].type);
+    parentNode.appendChild(node);
 
-   // Обработчик события для элементов папок
-   var folders = document.querySelectorAll(".folder");
-   for (var i = 0; i < folders.length; i++) {
-    folders[i].addEventListener("click", function() {
-     // Выбираем папку-родитель для нового файла
-     var selectedFolder = this;
-     // Обработчик события для кнопки "Add"
-     addButton.addEventListener("click", function() {
-      // Создаем новый элемент файла
-      var item = document.createElement("li");
-      item.textContent = input.value;
-      item.classList.add("file");
-      // Добавляем новый элемент файла в выбранную папку
-      selectedFolder.appendChild(item);
-      // Удаляем текстовое поле и кнопку "Add"
-      file.removeChild(input);
-      file.removeChild(addButton);
+    if (data[i].type === "folder") {
+     var childNode = document.createElement("ul");
+     childNode.classList.add("folder");
+     node.appendChild(childNode);
+     createTree(data[i].children, childNode);
+
+     // Add event listener for selecting folder
+     node.addEventListener("click", function() {
+      selectedFolder = this;
      });
+    }
+
+    // Add delete button
+    var deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    node.appendChild(deleteButton);
+
+    // Add event listener for deleting element
+    deleteButton.addEventListener("click", function(event) {
+     event.stopPropagation();
+     this.parentNode.parentNode.removeChild(this.parentNode);
     });
    }
+  }
+
+  createTree(treeData, rootNode);
+
+  // Add event listener for adding folder
+  var addFolderButton = document.getElementById("addFolder");
+  addFolderButton.addEventListener("click", function() {
+   var folderName = document.getElementById("folderName").value;
+   if (folderName !== "") {
+    var folderNode = document.createElement("li");
+    folderNode.textContent = folderName;
+    folderNode.classList.add("folder");
+    selectedFolder.appendChild(folderNode);
+
+    var childNode = document.createElement("ul");
+    childNode.classList.add("folder");
+    folderNode.appendChild(childNode);
+
+    // Add delete button
+    var deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    folderNode.appendChild(deleteButton);
+
+    // Add event listener for deleting element
+    deleteButton.addEventListener("click", function(event) {
+     event.stopPropagation();
+     this.parentNode.parentNode.removeChild(this.parentNode);
+    });
+
+    // Clear input field
+    document.getElementById("folderName").value = "";
+   }
   });
+  // Добавляем обработчик события для контекстного меню
+tree.addEventListener('contextmenu', function(e) {
+  e.preventDefault(); // Отменяем стандартное контекстное меню браузера
+  var node = e.target; // Получаем элемент, на котором был сделан щелчок правой кнопкой мыши
+  var menu = document.createElement('menu'); // Создаем элемент меню
+  menu.setAttribute('type', 'context'); // Устанавливаем тип меню
+  var addMenuItem = document.createElement('menuitem'); // Создаем элемент меню "Добавить элемент"
+  addMenuItem.setAttribute('label', 'Добавить элемент');
+  addMenuItem.addEventListener('click', function() {
+    var newNode = document.createElement('li'); // Создаем новый элемент
+    newNode.textContent = 'Новый элемент'; // Устанавливаем текст для нового элемента
+    node.appendChild(newNode); // Добавляем новый элемент в выбранный элемент
+  });
+  menu.appendChild(addMenuItem); // Добавляем элемент "Добавить элемент" в меню
+  if (node.parentNode !== tree) { // Если выбранный элемент не корневой элемент
+    var deleteMenuItem = document.createElement('menuitem'); // Создаем элемент меню "Удалить элемент"
+    deleteMenuItem.setAttribute('label', 'Удалить элемент');
+    deleteMenuItem.addEventListener('click', function() {
+      node.parentNode.removeChild(node); // Удаляем выбранный элемент из дерева
+    });
+    menu.appendChild(deleteMenuItem); // Добавляем элемент "Удалить элемент" в меню
+  }
+  menu.popup(e.clientX, e.clientY); // Отображаем контекстное меню
+});
+
+  // Add event listener for adding file
+  var addFileButton = document.getElementById("addFile");
+  addFileButton.addEventListener("click", function() {
+   var fileName = document.getElementById("fileName").value;
+   if (fileName !== "") {
+    var fileNode = document.createElement("li");
+    fileNode.textContent = fileName;
+    fileNode.classList.add("file");
+    selectedFolder.appendChild(fileNode);
+
+    // Add delete button
+    var deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    fileNode.appendChild(deleteButton);
+
+    // Add event listener for deleting element
+    deleteButton.addEventListener("click", function(event) {
+     event.stopPropagation();
+     this.parentNode.parentNode.removeChild(this.parentNode);
+    });
+    // Clear input field
+    document.getElementById("fileName").value = "";
+   }
+  });
+
+  // Initialize selected folder
+  var selectedFolder = rootNode;
  </script>
 </body>
 </html>

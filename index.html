@@ -1,47 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
-    <title>Document</title>
+ <title>Структура файлов и каталогов</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <ul class = "tree" id = "tree">
-       <li>/C
-        <ul>
-            <li>Users
-                <ul>
-                    <li>data</li>
-                    <li>photos</li>
-                    <li>prog</li>
-                    <li>smth</li>
-                </ul>
-            </li>
-            <li>progFiles
-                <ul>
-                    <li>steam</li>
-                    <li>epicGames</li>
-                    <li>VSCode</li>
-                    <li>VS</li>
-                </ul>
-            </li>
-        </ul>
-       </li>
-       <li>/D
-        <ul>
-            <li>cache
-                <ul>
-                    <li>1233</li>
-                    <li>421</li>
-                    <li>12412455</li>
-                    <li>12441256</li>
-                </ul>
-            </li>
-        </ul>
-       </li> 
-    </ul>
-    <script src="js/main.js"></script>
+ <ul id="file-tree">
+  <li class="folder">Каталог 1
+   <ul>
+    <li class="file">Файл 1.1</li>
+    <li class="file">Файл 1.2</li>
+   </ul>
+  </li>
+  <li class="folder">Каталог 2
+   <ul>
+    <li class="file">Файл 2.1</li>
+    <li class="file">Файл 2.2</li>
+   </ul>
+  </li>
+ </ul>
+
+ <script src="js/main.js"></script>
 </body>
 </html>
