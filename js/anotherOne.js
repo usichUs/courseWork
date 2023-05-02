@@ -1,5 +1,6 @@
 let maxID = 4;
 
+
 const FILESYSTEM = [
     {
       id: 0,
@@ -33,52 +34,6 @@ const FILESYSTEM = [
     },
   ]
 
-function createFolder(parentId, name) {
-    FILESYSTEM.push({
-        id:++maxID,
-        type:0,
-        parentId:parentId,
-        name:name,
-    })
-}
-
-function createFile(parentId, name) {
-  FILESYSTEM.push({
-    id:++maxID,
-    type:1,
-    parentId:parentId,
-    name:name,
-  })
-}
-
-function deleteFile(fileId) {
-    for (let i = 0; i < FILESYSTEM.length; i++) {
-      if(FILESYSTEM[i].type == 1 && FILESYSTEM[i].id == fileId) {
-          FILESYSTEM.splice(i, 1);
-      }
-    }
-    return;
-  }  
-
-function deleteFolder(folderId) {
-    let mID;
-    let dI;
-    for (let i = 0; i < FILESYSTEM.length; i++) {
-        if(FILESYSTEM[i].type === 0 && FILESYSTEM[i].id === folderId) {
-            mID = FILESYSTEM[i].id;
-            dI = i;
-        }
-    }
-    for (let j = 0; j < FILESYSTEM.length; j++) {
-        if(FILESYSTEM[j].type === 1 && FILESYSTEM[j].parentId === mID){
-            FILESYSTEM.splice(j, 1);
-            j--;
-        }
-    }
-    FILESYSTEM.splice(dI, 1);
-    return;
-}
-
 class FileSystem{
     data = null
     maxId = 0
@@ -88,26 +43,51 @@ class FileSystem{
     }
   
     calcMaxId() {
-  
+      let maxId = 0;
+      for (let i = 0; i < this.data.length; i++) {
+        maxId = Math.max(maxId, this.data[i].id);
+      }
+      this.maxId = maxId;
     }
   
     createFolder(parentId, name) {
-  
+      this.maxId++;
+      this.data.push({
+        id: this.maxId,
+        type: 0,
+        parentId,
+        name,
+    })
     }
     
     createFile(parentId, name) {
-      
+      this.maxId++;
+      this.data.push({
+        id: this.maxId,
+        type: 1,
+        parentId,
+        name,
+      })
     }
     
     deleteFile(fileId) {
-      
-    }
-    
-    deleteFolder(folderId) {
-      
+      for (let i = 0; i < this.data.length; i++) {
+        if(this.data[i].type == 1 && this.data[i].id == fileId) {
+            this.data.splice(i, 1);
+            break;
+        }
+      }
     }
   }
   
+  const insertFoler = ```<li>
+  <span class="folder">Folder 1</span>
+  <ul>
+
+  </ul>
+  </li>```
+  const insertFile = `<li><span class="file">File 1.1</span></li>`
+
   class FileSystemHTML extends FileSystem{
     outerHtml = null
     drow(htmlElement) {
@@ -118,7 +98,19 @@ class FileSystem{
       render() {
     
       }
-    
+      
+      createHTMLFolder(id, name) {
+        let folder = document.createElement(`li`);
+        folder.innerHTML = `<li><span class="folder">${name}</span> <ul></ul> </li>`;
+        return folder;
+      }
+
+      createHTMLFile(id, name) {
+        let file = document.createElement(`li`);
+        file.innerHTML = `<li><span class="file">${name}</span></li>`;
+        return file;
+      }
+
       createFolder(parentId, name) {
         super.createFolder(parentId, name)
         this.render()
@@ -140,8 +132,28 @@ class FileSystem{
       }
     }
   
+    // function deleteFolder(folderId) {
+    //   const stack = [];
+    
+    //   // Удаляем все вложенные элементы из стека
+    //   while (stack.length > 0) {
+    //     const item = stack.pop();
+        
+    //     // for (let i = 0; i < FILESYSTEM.length; i++) {
 
-
-
-
-
+    //     // }
+      
+    //       // Добавляем все вложенные элементы в стек
+    //     for (let i = 0; i < FILESYSTEM.length; i++) {
+    //       if (FILESYSTEM[i].parentId === item.id) {
+    //         if(FILESYSTEM[i].type === 0) {
+    //           stack.push(FILESYSTEM[i]);
+    //         }
+    //       }
+    //     }
+    
+    //     // Удаляем текущий элемент
+    //     const index = FILESYSTEM.indexOf(item);
+    //     FILESYSTEM.splice(index, 1);
+    //   }
+    // } 
