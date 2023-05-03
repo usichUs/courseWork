@@ -28,9 +28,10 @@
     font-weight: 700;
   }
   
-  #file-tree .file.hidden {
+  #file-tree .folder.hidden + ul {
     display: none;
   }
+
   #file-tree .file {
     display: block;
   }
@@ -38,5 +39,7 @@
   #file-tree .file:before {
     content: "🗒️ ";
   }
+
+
 
   /* Контекст меню */

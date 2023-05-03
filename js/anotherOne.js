@@ -1,5 +1,7 @@
 let maxID = 4;
 
+const tree = document.querySelector(`#file-tree`);
+
 
 const FILESYSTEM = [
     {
@@ -32,6 +34,66 @@ const FILESYSTEM = [
       parentId: 1,
       name: 'File 2',
     },
+    {
+      id: 5,
+      type: 1,
+      parentId: 2,
+      name: 'File 3',
+    },
+    {
+      id: 6,
+      type: 0,
+      parentId: 2,
+      name: 'Folder 4',
+    },
+    {
+      id: 7,
+      type: 1,
+      parentId: 6,
+      name: 'File 4',
+    },
+    {
+      id: 8,
+      type: 0,
+      parentId: 0,
+      name: 'Folder 5',
+    },
+    {
+      id: 9,
+      type: 1,
+      parentId: 8,
+      name: 'File 5',
+    },
+    {
+      id: 10,
+      type: 1,
+      parentId: 8,
+      name: 'File 6',
+    },
+    {
+      id: 11,
+      type: 0,
+      parentId: 8,
+      name: 'Folder 6',
+    },   
+    {
+      id: 12,
+      type: 0,
+      parentId: 11,
+      name: 'Folder 7',
+    },  
+    {
+      id: 13,
+      type: 0,
+      parentId: 12,
+      name: 'Folder 8',
+    },  
+    {
+      id: 14,
+      type: 1,
+      parentId: 13,
+      name: 'File 7',
+    },  
   ]
 
 class FileSystem{
@@ -80,14 +142,6 @@ class FileSystem{
     }
   }
   
-  const insertFoler = ```<li>
-  <span class="folder">Folder 1</span>
-  <ul>
-
-  </ul>
-  </li>```
-  const insertFile = `<li><span class="file">File 1.1</span></li>`
-
   class FileSystemHTML extends FileSystem{
     outerHtml = null
     drow(htmlElement) {
@@ -96,18 +150,35 @@ class FileSystem{
       }
     
       render() {
-    
+        const dataHTML = this.data.reduce((sum, cur) => {
+          sum[cur.id] = {
+            ...cur,
+            html: cur.type === 0 ? this.createHTMLFolder(cur.id, cur.name) : this.createHTMLFile(cur.id, cur.name), 
+          }
+          return sum;
+        }, {})
+        for(let elem of Object.keys(dataHTML)) {
+          if (dataHTML[elem].parentId === null) {
+            this.outerHtml.appendChild(dataHTML[elem].html);
+          } else {
+            dataHTML[dataHTML[elem].parentId].html.querySelector(`ul`).appendChild(dataHTML[elem].html);
+          }
+        }
       }
       
       createHTMLFolder(id, name) {
         let folder = document.createElement(`li`);
-        folder.innerHTML = `<li><span class="folder">${name}</span> <ul></ul> </li>`;
+        folder.innerHTML = `<span class="folder">${name}</span> <ul></ul> `;
+        const folderTitle = folder.querySelector(`span`);
+        folderTitle.onclick = () => { 
+          folderTitle.classList.toggle(`hidden`);
+        }
         return folder;
       }
 
       createHTMLFile(id, name) {
         let file = document.createElement(`li`);
-        file.innerHTML = `<li><span class="file">${name}</span></li>`;
+        file.innerHTML = `<span class="file">${name}</span>`;
         return file;
       }
 
@@ -131,6 +202,10 @@ class FileSystem{
         this.render()
       }
     }
+
+    const filesystem = new FileSystemHTML();
+    filesystem.init(FILESYSTEM);
+    filesystem.drow(tree);
   
     // function deleteFolder(folderId) {
     //   const stack = [];
@@ -157,3 +232,4 @@ class FileSystem{
     //     FILESYSTEM.splice(index, 1);
     //   }
     // } 
+
