@@ -2,6 +2,8 @@ let maxID = 4;
 
 const tree = document.querySelector(`#file-tree`);
 
+const contextMenu = document.querySelector(`.fold-context-menu`);
+
 
 const FILESYSTEM = [
     {
@@ -144,6 +146,32 @@ class FileSystem{
   
   class FileSystemHTML extends FileSystem{
     outerHtml = null
+    contextMenuFileItems = [{
+      name: `Удалить файл`,
+      onclick: (fileId)=> {
+        this.deleteFile(fileId);
+      }
+    },
+  ]
+    contextMenuFolderItems = [{
+      name: `Удалить папку`,
+      onclick: ()=> {
+        
+      },
+    },
+    {
+      name: `Добавить папку`,
+      onclick: (parentId)=> {
+        this.createFolder(parentId, `Новая папка`);
+      },
+    },
+    {
+      name: `Добавить файл`,
+      onclick: (parentId)=> {
+        this.createFile(parentId, `Новый файл`);
+      },
+    },
+  ]
     drow(htmlElement) {
         this.outerHtml = htmlElement
         this.render();
@@ -173,6 +201,10 @@ class FileSystem{
         folderTitle.onclick = () => { 
           folderTitle.classList.toggle(`hidden`);
         }
+        folderTitle.oncontextmenu = (event) => { 
+          event.preventDefault();
+          this.openPopUp(event.clientX, event.clientY, id, 0);
+        }
         return folder;
       }
 
@@ -201,11 +233,42 @@ class FileSystem{
         super.deleteFolder(folderId)
         this.render()
       }
+
+      openPopUp(coorX, coorY, id, type) {
+        contextMenu.innerHTML = ``;
+        contextMenu.style.top = coorY + `px`;
+        contextMenu.style.left = coorX + `px`;
+        contextMenu.style.display = `block`;
+        document.addEventListener(`click`, this.closePopUp);
+        const contextItemsHTML = this.getContextItemsHTML(id, type);
+        for(let item of contextItemsHTML) {
+          contextMenu.appendChild(item);
+        } 
+      }
+
+      closePopUp() {
+        contextMenu.style.display = `none`;
+        document.removeEventListener(`click`, this.closePopUp);
+      }
+
+      getContextItemsHTML(id, type) {
+        const items = type === 0 ? this.contextMenuFolderItems : this.contextMenuFileItems
+         return items.map((item)=> {
+          let el = document.createElement(`div`);
+          el.textContent = item.name;
+          el.onclick = ()=> {
+            item.onclick(id);
+          }
+          return el
+         })
+      }
+
     }
 
     const filesystem = new FileSystemHTML();
     filesystem.init(FILESYSTEM);
     filesystem.drow(tree);
+
   
     // function deleteFolder(folderId) {
     //   const stack = [];
