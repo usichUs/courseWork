@@ -178,6 +178,7 @@ class FileSystem{
       }
     
       render() {
+        tree.innerHTML = ``;
         const dataHTML = this.data.reduce((sum, cur) => {
           sum[cur.id] = {
             ...cur,
@@ -211,6 +212,11 @@ class FileSystem{
       createHTMLFile(id, name) {
         let file = document.createElement(`li`);
         file.innerHTML = `<span class="file">${name}</span>`;
+        const fileTitle = file.querySelector(`span`);
+        fileTitle.oncontextmenu = (event) => {
+          event.preventDefault();
+          this.openPopUp(event.clientX, event.clientY, id, 1);
+        }
         return file;
       }
 
