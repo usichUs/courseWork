@@ -4,7 +4,6 @@ const tree = document.querySelector(`#file-tree`);
 
 const contextMenu = document.querySelector(`.fold-context-menu`);
 
-
 const FILESYSTEM = [
     {
       id: 0,
@@ -98,7 +97,7 @@ const FILESYSTEM = [
     },  
   ]
 
-class FileSystem{
+class FileSystem {
     data = null
     maxId = 0
     init(data) {
@@ -142,6 +141,25 @@ class FileSystem{
         }
       }
     }
+
+    deleteFolder(folderId) {
+      let mID;
+      let dI;
+      for (let i = 0; i < this.data.length; i++) {
+          if(this.data[i].type === 0 && this.data[i].id === folderId) {
+              mID = this.data[i].id;
+              dI = i;
+          }
+      }
+      for (let j = 0; j < this.data.length; j++) {
+          if(this.data[j].type === 1 && this.data[j].parentId === mID){
+              this.data.splice(j, 1);
+              j--;
+          }
+      }
+      FILESYSTEM.splice(dI, 1);
+      return;
+  }
   }
   
   class FileSystemHTML extends FileSystem{
@@ -155,8 +173,8 @@ class FileSystem{
   ]
     contextMenuFolderItems = [{
       name: `Удалить папку`,
-      onclick: ()=> {
-        
+      onclick: (folderId)=> {
+        this.deleteFolder(folderId);
       },
     },
     {
@@ -276,29 +294,4 @@ class FileSystem{
     filesystem.drow(tree);
 
   
-    // function deleteFolder(folderId) {
-    //   const stack = [];
-    
-    //   // Удаляем все вложенные элементы из стека
-    //   while (stack.length > 0) {
-    //     const item = stack.pop();
-        
-    //     // for (let i = 0; i < FILESYSTEM.length; i++) {
-
-    //     // }
-      
-    //       // Добавляем все вложенные элементы в стек
-    //     for (let i = 0; i < FILESYSTEM.length; i++) {
-    //       if (FILESYSTEM[i].parentId === item.id) {
-    //         if(FILESYSTEM[i].type === 0) {
-    //           stack.push(FILESYSTEM[i]);
-    //         }
-    //       }
-    //     }
-    
-    //     // Удаляем текущий элемент
-    //     const index = FILESYSTEM.indexOf(item);
-    //     FILESYSTEM.splice(index, 1);
-    //   }
-    // } 
 

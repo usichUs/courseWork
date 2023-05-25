@@ -39,15 +39,49 @@
   #file-tree .file:before {
     content: "🗒️ ";
   }
-
-
-
+  
   /* Контекст меню */
+
   .fold-context-menu {
-    border: 2px black solid;
-    width: 300px;
-    height: 200px;
-    display: none;
+    margin: 0;
+    counter-reset: div;
+    list-style: none;
+    background:#E8E8E8;
+    padding: 10px;
     position: absolute;
-    font-size: 30px;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .fold-context-menu div {
+    position: relative;
+    margin: 0 0 10px 2em;
+    padding: 4px 8px;
+    border-top: 2px solid #787A77;
+    transition: .3s linear;
+    cursor: pointer;
+  }
+  .fold-context-menu div:last-child {margin-bottom: 0;}
+  .fold-context-menu div:before {
+    content: counter(div);
+    counter-increment: div;
+    position: absolute;
+    top: -2px;
+    left: -2em;
+    width: 2em;
+    box-sizing: border-box;
+    margin-right: 8px;
+    padding: 4px;
+    border-top: 2px solid #787A77;
+    border-left: 2px solid transparent;
+    border-right: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    background: #787A77;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    transition: .3s linear;
+  }
+  .fold-context-menu div:hover {border-top: 2px solid #fc7a10;}
+  .fold-context-menu div:hover:before {
+    border: 2px solid #fc7a10;
+    background: #217715;
   }

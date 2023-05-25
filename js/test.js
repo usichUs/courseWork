@@ -74,3 +74,7 @@ class ExtendedClock extends Clock {
         this.timer = setInterval(() => this.render(), this.precision);
     }
 };
+
+
+let myObject = new MyClass("John");
+myObject.sayHello(); // выведет "Hello, John!"
